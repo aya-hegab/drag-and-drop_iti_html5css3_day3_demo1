@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>drag and drop</title>
+    <style>
+      #container {
+        display: flex;
+        justify-content: space-evenly;
+        height: 600px;
+        align-items: center;
+        border: 2px dashed red;
+      }
+
+      div:not(#container) {
+        width: 500px;
+        height: 500px;
+        border: 2px solid black;
+      }
+
+      img {
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+      }
+
+      #container > div {
+        display: flex;
+        flex-wrap: wrap;
+        align-content: flex-start;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <div id="left-div"></div>
+      <div id="right-div">
+        <img src="1.jpg" id="first-img" />
+        <img src="2.jpg" />
+        <img src="3.jpg" />
+        <img src="4.jpg" />
+        <img src="5.jpg" />
+        <img src="6.jpg" />
+      </div>
+    </div>
+    <script>
+      let imgs = document.images;
+      let leftDiv = document.getElementById("left-div");
+      let rightDiv = document.getElementById("right-div");
+
+      // images => dragstart | dragend
+      for (let i = 0; i < imgs.length; i++) {
+        imgs[i].addEventListener("dragstart", startDrag);
+        imgs[i].addEventListener("dragend", endDrag);
+      }
+
+      function startDrag(e) {
+        // console.log(e)
+        // console.log(e.target.outerHTML)
+        // console.log(e.dataTransfer)
+        e.dataTransfer.setData("usrImage", e.target.outerHTML);
+        console.log("start drag");
+      }
+
+      function endDrag(e) {
+        e.preventDefault();
+        // console.log(e.target)
+        e.target.style.display = "none";
+        leftDiv.style.backgroundColor = "red";
+        console.log("end drag");
+      }
+
+      // data-count
+
+      //rightDiv => dragleave
+      rightDiv.addEventListener("dragleave", leaveDrag);
+
+      function leaveDrag(e) {
+        e.preventDefault();
+        console.log("leave drag");
+      }
+
+      //leftDiv => dragenter | dragover | dropped
+      leftDiv.addEventListener("dragenter", enterDrag);
+      function enterDrag(e) {
+        e.preventDefault();
+        console.log("enter drag");
+      }
+
+      leftDiv.addEventListener("dragover", overDrag);
+      function overDrag(e) {
+        e.preventDefault();
+        console.log("over drag");
+      }
+
+      leftDiv.addEventListener("drop", dropped);
+      function dropped(e) {
+        e.preventDefault();
+        leftDiv.innerHTML += e.dataTransfer.getData("usrImage");
+        console.log("dropped");
+      }
+    </script>
+  </body>
+</html>
